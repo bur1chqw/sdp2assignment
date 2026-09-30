@@ -178,4 +178,37 @@ public class EVFactoryTest {
         assertNotNull(vehicle.getMotor());
         assertNotNull(vehicle.getChargingSystem());
     }
+    // Factory Method tests
+
+    @Test
+    void shouldCreateCityVehicleCreator() {
+        VehicleCreator creator =
+                VehicleCreatorProvider.getCreator("city");
+
+        assertInstanceOf(CityVehicleCreator.class, creator);
+    }
+
+    @Test
+    void shouldCreateSportVehicleCreator() {
+        VehicleCreator creator =
+                VehicleCreatorProvider.getCreator("sport");
+
+        assertInstanceOf(SportVehicleCreator.class, creator);
+    }
+
+    @Test
+    void shouldCreateLuxuryVehicleCreator() {
+        VehicleCreator creator =
+                VehicleCreatorProvider.getCreator("luxury");
+
+        assertInstanceOf(LuxuryVehicleCreator.class, creator);
+    }
+
+    @Test
+    void shouldRejectUnknownVehicleCreator() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> VehicleCreatorProvider.getCreator("unknown")
+        );
+    }
 }
