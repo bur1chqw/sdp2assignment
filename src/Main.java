@@ -6,40 +6,46 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Choose EV family (city, sport, luxury): ");
+        System.out.print(
+                "Choose EV family (city, sport, luxury): "
+        );
+
         String family = scanner.nextLine();
 
-        Battery battery;
-        Motor motor;
-        ChargingSystem charger;
+        try {
+            EVComponentFactory factory =
+                    FactoryProvider.getFactory(family);
 
-        if (family.equalsIgnoreCase("city")) {
+            ElectricVehicleSystem vehicle =
+                    new ElectricVehicleSystem(factory);
 
-            battery = new Battery("City", 50);
-            motor = new Motor("City", 100);
-            charger = new ChargingSystem("City", 50);
+            vehicle.startVehicle();
+            vehicle.chargeVehicle();
+            vehicle.showPerformance();
 
-        } else if (family.equalsIgnoreCase("sport")) {
+            System.out.println("\n--- Factory Method Demo ---");
 
-            battery = new Battery("Sport", 90);
-            motor = new Motor("Sport", 400);
-            charger = new ChargingSystem("Sport", 150);
+            VehicleCreator creator;
 
-        } else if (family.equalsIgnoreCase("luxury")) {
+            switch (family.toLowerCase()) {
+                case "city" ->
+                        creator = new CityVehicleCreator();
 
-            battery = new Battery("Luxury", 110);
-            motor = new Motor("Luxury", 300);
-            charger = new ChargingSystem("Luxury", 200);
+                case "sport" ->
+                        creator = new SportVehicleCreator();
 
-        } else {
-            System.out.println("Unknown EV family.");
-            return;
+                case "luxury" ->
+                        creator = new LuxuryVehicleCreator();
+
+                default -> throw new IllegalArgumentException(
+                        "Unknown EV family: " + family
+                );
+            }
+
+            creator.startTrip();
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
-
-        System.out.println("\nElectric vehicle created:");
-
-        battery.supplyPower();
-        motor.start();
-        charger.charge();
     }
 }
