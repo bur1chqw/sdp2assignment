@@ -7,12 +7,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print(
-                "Choose EV family (city, sport, luxury): "
+                "Choose EV family (city, sport, luxury, offroad): "
         );
 
         String family = scanner.nextLine();
 
         try {
+            // Abstract Factory
             EVComponentFactory factory =
                     FactoryProvider.getFactory(family);
 
@@ -23,26 +24,26 @@ public class Main {
             vehicle.chargeVehicle();
             vehicle.showPerformance();
 
-            System.out.println("\n--- Factory Method Demo ---");
 
-            VehicleCreator creator;
+            // Factory Method demo
+            // OffRoad belongs to the newly added Abstract Factory family,
+            // so Factory Method demo is used only for the original 3 types.
+            if (!family.equalsIgnoreCase("offroad")) {
 
-            switch (family.toLowerCase()) {
-                case "city" ->
-                        creator = new CityVehicleCreator();
+                System.out.println("\n--- Factory Method Demo ---");
 
-                case "sport" ->
-                        creator = new SportVehicleCreator();
+                VehicleCreator creator = switch (family.toLowerCase()) {
+                    case "city" -> new CityVehicleCreator();
+                    case "sport" -> new SportVehicleCreator();
+                    case "luxury" -> new LuxuryVehicleCreator();
 
-                case "luxury" ->
-                        creator = new LuxuryVehicleCreator();
+                    default -> throw new IllegalArgumentException(
+                            "Unknown EV family: " + family
+                    );
+                };
 
-                default -> throw new IllegalArgumentException(
-                        "Unknown EV family: " + family
-                );
+                creator.startTrip();
             }
-
-            creator.startTrip();
 
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());

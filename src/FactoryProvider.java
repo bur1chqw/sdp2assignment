@@ -10,6 +10,7 @@ public class FactoryProvider {
             case "city" -> new CityEVFactory();
             case "sport" -> new SportEVFactory();
             case "luxury" -> new LuxuryEVFactory();
+            case "offroad" -> new OffRoadEVFactory();
             default -> throw new IllegalArgumentException(
                     "Unknown EV family: " + family
             );
