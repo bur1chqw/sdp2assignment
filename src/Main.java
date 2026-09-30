@@ -32,15 +32,8 @@ public class Main {
 
                 System.out.println("\n--- Factory Method Demo ---");
 
-                VehicleCreator creator = switch (family.toLowerCase()) {
-                    case "city" -> new CityVehicleCreator();
-                    case "sport" -> new SportVehicleCreator();
-                    case "luxury" -> new LuxuryVehicleCreator();
-
-                    default -> throw new IllegalArgumentException(
-                            "Unknown EV family: " + family
-                    );
-                };
+                VehicleCreator creator =
+                        VehicleCreatorProvider.getCreator(family);
 
                 creator.startTrip();
             }
